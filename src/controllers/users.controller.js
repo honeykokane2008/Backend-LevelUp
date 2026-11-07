@@ -21,8 +21,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     const { username, email, fullname, password } = req.body
 
-    
-    // console.log(username, email, fullname, password)
+    console.log(username, email, fullname, password);
 
     if (
         [username, email, fullname, password].some((field) => !field || field.trim() === "")
@@ -42,10 +41,9 @@ const registerUser = asyncHandler(async (req, res, next) => {
         throw new ApiError(409, "User with this email or username already exists");
     };
 
-    
-
-
-
+    return res.status(201).json(
+        new ApiResponse(
+            201, createdUser, "User registered successfully"));
 
 })
 
