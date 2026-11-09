@@ -3,6 +3,7 @@ import { ApiError } from "../utils/ApiError.js"
 import { User } from "../models/user.models.js"
 import mongoose from "mongoose"
 import { response } from "express"
+import { ApiResponse } from "../utils/ApiResponse.js"
 
 
 const registerUser = asyncHandler(async (req, res, next) => {
@@ -41,10 +42,29 @@ const registerUser = asyncHandler(async (req, res, next) => {
         throw new ApiError(409, "User with this email or username already exists");
     };
 
+    const user = await User.create({
+        username: username.toLowerCase(),
+        email,
+        fullname,
+        password
+    })
+
+    const createdUser = await User.findById(user._id).select(
+        "-password -refreshToken"
+    )
+
+    if (!createdUser) {
+        throw new ApiError(500, "User not created due to some internal error");
+
+    }
+
+
     return res.status(201).json(
         new ApiResponse(
             201, createdUser, "User registered successfully"));
 
-})
+
+});
+
 
 export { registerUser }
