@@ -23,7 +23,7 @@ const uploadOnCloudinary = async (localFilePath) => {
         return response;
 
     } catch (error) {
-        if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath); // and after failure
+        if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath); // delete temp file after failure
         return null;
     }
 };

@@ -1,0 +1,4 @@
+$kind: http-request
+url: http://localhost:5000/api/v1/user/register
+method: POST
+order: 1000

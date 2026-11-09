@@ -44,7 +44,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     const avatarLocalPath = req.files?.avatar[0]?.path;
 
-    const coverimgLocalPath = req.files?.coverimg[0]?.path;
+    //    const coverimgLocalPath = req.files?.coverimg[0]?.path;
+    // let coverimg;
+    let coverimgLocalPath;
+    if (req.files && req.files.coverimg && req.files.coverimg.length > 0) {
+        coverimgLocalPath = req.files.coverimg[0].path;
+    }
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar img is required");
@@ -61,7 +66,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         username: username.toLowerCase(),
         email,
         avatar: avatar.url,
-        coverimg: coverimg.url || "",
+        coverimg: coverimg?.url || "",
         fullname,
         password
     })
