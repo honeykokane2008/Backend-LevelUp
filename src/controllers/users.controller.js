@@ -4,6 +4,8 @@ import { User } from "../models/user.models.js"
 import mongoose from "mongoose"
 import { response } from "express"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import { uploadOnCloudinary } from "../utils/cloudinary.js"
+
 
 
 const registerUser = asyncHandler(async (req, res, next) => {
@@ -20,9 +22,8 @@ const registerUser = asyncHandler(async (req, res, next) => {
     // remove pasword and refreshToken from retrun response of user
     // return response to user
 
-    const { username, email, fullname, password } = req.body
+    const { username, email, fullname, password } = req.body;
 
-    console.log(username, email, fullname, password);
 
     if (
         [username, email, fullname, password].some((field) => !field || field.trim() === "")
@@ -37,14 +38,30 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     console.log("DB name at query time:", mongoose.connection.name);
 
-
     if (userExist) {
         throw new ApiError(409, "User with this email or username already exists");
     };
 
+    const avatarLocalPath = req.files?.avatar[0]?.path;
+
+    const coverimgLocalPath = req.files?.coverimg[0]?.path;
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "Avatar img is required");
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath, "avatars");
+    const coverimg = await uploadOnCloudinary(coverimgLocalPath, "coverimgs");
+
+    if (!avatar) {
+        throw new ApiError(500, "Avatar upload failed");
+    }
+
     const user = await User.create({
         username: username.toLowerCase(),
         email,
+        avatar: avatar.url,
+        coverimg: coverimg.url || "",
         fullname,
         password
     })
