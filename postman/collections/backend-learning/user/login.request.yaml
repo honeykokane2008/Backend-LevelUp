@@ -1,4 +1,22 @@
 $kind: http-request
-url: ""
-method: GET
+url: "{{server}}/user/login"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: username
+      value: honeykokane2
+      description: ""
+      disabled: false
+    - type: text
+      key: email
+      value: honeykokane2008@gmail.com
+      description: ""
+      disabled: false
+    - type: text
+      key: password
+      value: honey@0981
+      description: ""
+      disabled: false
 order: 2000
