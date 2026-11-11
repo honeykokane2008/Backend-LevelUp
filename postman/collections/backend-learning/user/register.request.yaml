@@ -1,4 +1,39 @@
 $kind: http-request
-url: http://localhost:5000/api/v1/user/register
+url: "{{server}}/user/register"
 method: POST
+body:
+  type: formdata
+  content:
+    - type: text
+      key: username
+      value: honeykokane2
+      description: ""
+      disabled: false
+    - type: text
+      key: email
+      value: honeykokane2008@gmail.com
+      description: ""
+      disabled: false
+    - type: text
+      key: fullname
+      value: Honey kokane
+      description: ""
+      disabled: false
+    - type: file
+      key: avatar
+      src:
+        - postman-cloud:///1f1dbfb0-bb34-4bd0-badf-355d5f0b7cc8
+      description: ""
+      disabled: false
+    - type: file
+      key: coverimg
+      src:
+        - postman-cloud:///1f1dbfb1-2927-4b60-a243-da742fa2ba17
+      description: ""
+      disabled: false
+    - type: text
+      key: password
+      value: honey@0981
+      description: ""
+      disabled: false
 order: 1000

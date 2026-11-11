@@ -2,6 +2,6 @@ $kind: http-request
 url: "{{server}}/user/logout"
 method: POST
 body:
-  type: formdata
-  content: []
+  type: json
+  content: ""
 order: 3000

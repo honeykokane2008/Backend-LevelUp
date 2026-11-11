@@ -1,10 +1,11 @@
-import { asyncHandler } from "../utils/asyncHandler.js"
-import { ApiError } from "../utils/ApiError.js"
-import { User } from "../models/user.models.js"
-import mongoose from "mongoose"
-import { response } from "express"
-import { ApiResponse } from "../utils/ApiResponse.js"
-import { uploadOnCloudinary } from "../utils/cloudinary.js"
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { User } from "../models/user.models.js";
+import mongoose from "mongoose";
+import { response } from "express";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import jwt from "jsonwebtoken";
 
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
@@ -117,8 +118,6 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const { email, password, username } = req.body || {};
 
-    console.log("Data reached:", { email, password, username });
-
     if (!email && !username) {
         throw new ApiError(400, "give email or username");
     }
@@ -163,15 +162,15 @@ const loginUser = asyncHandler(async (req, res) => {
         )
 });
 
-const logoutUser = asyncHandler(async (req, res)=>{
+const logoutUser = asyncHandler(async (req, res) => {
 
     User.findByIdAndUpdate(
-        req.user._id, 
+        req.user._id,
         {
-            $unset:{ refreshToken:1 }
+            $unset: { refreshToken: 1 }
         },
         {
-            new:true
+            new: true
         }
     )
 
@@ -183,16 +182,70 @@ const logoutUser = asyncHandler(async (req, res)=>{
 
 
     return res
-    .status(200)
-    .clearCookie("accessToken", options)
-    .clearCookie("refreshToken", options)
-    .json(
-        new ApiResponse(200,
-            {},
-            "user logged out successfully"
+        .status(200)
+        .clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(
+            new ApiResponse(200,
+                {},
+                "user logged out successfully"
+            )
         )
-    )
-    
+
 });
 
-export { registerUser, loginUser, logoutUser }
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    try {
+
+        const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken;
+
+        if (!incomingRefreshToken) {
+            throw new ApiError(401, "incoming refresh token not reached")
+        }
+
+        const decodedIncomingRefreshToken = jwt.verify(incomingRefreshToken, process.env.REFRESH_TOKEN_SECRET)
+
+        const user = await User.findById(decodedIncomingRefreshToken?._id)
+
+        if (!user) {
+            throw new ApiError(401, "user not found");
+        }
+
+        if (incomingRefreshToken !== user?.refreshtoken) {
+            throw new ApiError(401, "refresh token not matched")
+        }
+
+        const options = {
+            httpOnly: true,
+            secure: true
+        }
+
+        const { accessToken, newRefreshToken } = await generateAccessTokenAndRefreshToken(user._id)
+
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, options)
+            .cookie("refreshToken", newRefreshToken, options)
+            .json(
+                new ApiResponse(
+                    200,
+                    {
+                        accessToken,
+                        refreshToken: newRefreshToken
+                    },
+                    "refreshed token and access token updated and send"
+
+                )
+            )
+    } catch (error) {
+        throw new ApiError(400, error || "problem in refresh Access Token ")
+    }
+});
+
+
+export {
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken
+}
