@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{server}}/user/getUser"
+method: GET
+order: 6000

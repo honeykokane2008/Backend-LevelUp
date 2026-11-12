@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{server}}/user/changePass"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"oldPassword\":\"sonu@0981\",\r
+
+    \    \"newPassword\":\"honey@0981\"\r
+
+    }"
+order: 5000

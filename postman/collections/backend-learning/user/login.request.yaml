@@ -2,21 +2,14 @@ $kind: http-request
 url: "{{server}}/user/login"
 method: POST
 body:
-  type: formdata
-  content:
-    - type: text
-      key: username
-      value: honeykokane2
-      description: ""
-      disabled: false
-    - type: text
-      key: email
-      value: honeykokane2008@gmail.com
-      description: ""
-      disabled: false
-    - type: text
-      key: password
-      value: honey@0981
-      description: ""
-      disabled: false
+  type: json
+  content: "{\r
+
+    \    \"username\":\"honeykokane2\",\r
+
+    \    \"email\":\"honeykokane2008@gmail.com\",\r
+
+    \    \"password\":\"honey@0981\"\r
+
+    }"
 order: 2000
