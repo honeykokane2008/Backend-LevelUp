@@ -1,0 +1,17 @@
+$kind: http-request
+url: "{{server}}/user/changeDetails"
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \    \"updatedEmail\": \"\",\r
+
+    \r
+
+    \    or,\r
+
+    \    \"updatedFullName\": \"\"\r
+
+    }"
+order: 7000

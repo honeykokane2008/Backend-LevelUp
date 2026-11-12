@@ -7,7 +7,8 @@ import {
     logoutUser,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentUser
+    getCurrentUser,
+    updateUserTextDetails
 } from "../controllers/users.controller.js";
 
 
@@ -42,6 +43,11 @@ router.route("/refreshToken").post(refreshAccessToken);
 
 router.route("/changePass").post(verifyJWT, changeCurrentPassword);
 
+
+router.route("/changeDetails").post(verifyJWT, updateUserTextDetails);
+
 router.route("/getCurrentUser").get(verifyJWT, getCurrentUser);
+
+
 
 export default router;

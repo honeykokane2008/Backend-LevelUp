@@ -265,18 +265,69 @@ const changeCurrentPassword = asyncHandler(async (req, res) => {
             new ApiResponse(200, {}, "password is changed")
         )
 
-})
+});
 
-const getCurrentUser = asyncHandler(async(req, res)=>{
+const getCurrentUser = asyncHandler(async (req, res) => {
     return res
-    .status(200)
-    .json(
-        new ApiResponse(
-            200, 
-            req.user,
-            "user fetched"
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                req.user,
+                "user fetched"
+            )
         )
-    )
+});
+
+
+const updateUserTextDetails = asyncHandler(async (req, res) => {
+    const { updatedFullName, updatedEmail } = req.body;
+
+    if (!updatedFullName && !updatedEmail) {
+        throw new ApiError(200, "give updated full name or updated email")
+    }
+
+    let user
+    if (updatedEmail) {
+
+        user = await User.findByIdAndUpdate(
+            req.user?._id,
+            {
+                $set: {
+                    email: updatedEmail
+                }
+            },
+            { new: true }
+        ).select("-password")
+
+    }
+
+
+    if (updatedFullName) {
+
+        user = await User.findByIdAndUpdate(
+            req.user?._id,
+            {
+                $set: {
+                    fullname: updatedFullName
+                }
+            },
+            { new: true }
+        ).select("-password")
+
+    }
+
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                user,
+                "account detals updated"
+            )
+        )
+
 })
 
 export {
@@ -285,5 +336,6 @@ export {
     logoutUser,
     refreshAccessToken,
     changeCurrentPassword,
-    getCurrentUser
+    getCurrentUser,
+    updateUserTextDetails
 }

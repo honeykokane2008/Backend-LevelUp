@@ -1,4 +1,7 @@
 $kind: http-request
-url: "{{server}}/user/getUser"
+url: "{{server}}/user/getCurrentUser"
 method: GET
+body:
+  type: json
+  content: ""
 order: 6000
