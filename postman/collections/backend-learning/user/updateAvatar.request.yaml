@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{server}}/user/updateAvatar"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: avatar
+      src:
+        - /C:/Users/user/Desktop/test4.avif
+      description: ""
+      disabled: false
+order: 8000

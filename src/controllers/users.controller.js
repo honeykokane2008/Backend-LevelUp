@@ -6,6 +6,7 @@ import { response } from "express";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
+import { upload } from "../middleware/multer.middleware.js";
 
 
 const generateAccessTokenAndRefreshToken = async (userId) => {
@@ -330,6 +331,43 @@ const updateUserTextDetails = asyncHandler(async (req, res) => {
 
 })
 
+
+const uddateUserAvatar = asyncHandler(async (req, res) => {
+    const avatarLocalPath = req.file?.path
+
+
+    if (!avatarLocalPath) {
+        throw new ApiError(400, "avatar local path not found");
+    }
+
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+
+    if (!avatar.url) {
+        throw new ApiError(400, "avatar img not upload");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                avatar: avatar.url
+            }
+        },
+        { new: true }
+    ).select("-password")
+
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                { user },
+                "avatar updated"
+            )
+        )
+})
+
 export {
     registerUser,
     loginUser,
@@ -337,5 +375,6 @@ export {
     refreshAccessToken,
     changeCurrentPassword,
     getCurrentUser,
-    updateUserTextDetails
+    updateUserTextDetails,
+    uddateUserAvatar
 }

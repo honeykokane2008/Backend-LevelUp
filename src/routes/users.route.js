@@ -8,7 +8,8 @@ import {
     refreshAccessToken,
     changeCurrentPassword,
     getCurrentUser,
-    updateUserTextDetails
+    updateUserTextDetails,
+    uddateUserAvatar
 } from "../controllers/users.controller.js";
 
 
@@ -43,10 +44,15 @@ router.route("/refreshToken").post(refreshAccessToken);
 
 router.route("/changePass").post(verifyJWT, changeCurrentPassword);
 
-
 router.route("/changeDetails").post(verifyJWT, updateUserTextDetails);
 
 router.route("/getCurrentUser").get(verifyJWT, getCurrentUser);
+
+router.route("/updateAvatar").post(
+    verifyJWT,
+    upload.single("avatar"),
+    uddateUserAvatar
+);
 
 
 
