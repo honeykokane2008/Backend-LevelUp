@@ -9,7 +9,8 @@ import {
     changeCurrentPassword,
     getCurrentUser,
     updateUserTextDetails,
-    uddateUserAvatar
+    uddateUserAvatar,
+    updateUserCoverImg
 } from "../controllers/users.controller.js";
 
 
@@ -52,6 +53,12 @@ router.route("/updateAvatar").post(
     verifyJWT,
     upload.single("avatar"),
     uddateUserAvatar
+);
+
+router.route("/updateCoverImg").post(
+    verifyJWT,
+    upload.single("coverimg"),
+    updateUserCoverImg
 );
 
 

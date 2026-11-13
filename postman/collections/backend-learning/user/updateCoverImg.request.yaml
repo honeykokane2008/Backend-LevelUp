@@ -1,0 +1,13 @@
+$kind: http-request
+url: "{{server}}/user/updateCoverImg"
+method: POST
+body:
+  type: formdata
+  content:
+    - type: file
+      key: coverimg
+      src:
+        - /C:/Users/user/Desktop/test4.avif
+      description: ""
+      disabled: false
+order: 9000

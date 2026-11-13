@@ -329,7 +329,7 @@ const updateUserTextDetails = asyncHandler(async (req, res) => {
             )
         )
 
-})
+});
 
 
 const uddateUserAvatar = asyncHandler(async (req, res) => {
@@ -366,7 +366,43 @@ const uddateUserAvatar = asyncHandler(async (req, res) => {
                 "avatar updated"
             )
         )
-})
+});
+
+
+const updateUserCoverImg = asyncHandler(async (req, res) => {
+    const coverImageLocalPath = req.file?.path
+
+    if (!coverImageLocalPath) {
+        throw new ApiError(400, "cover image local path not found");
+    }
+
+    const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+
+    if (!coverImage.url) {
+        throw new ApiError(400, "cover image not uploaded");
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.user?._id,
+        {
+            $set: {
+                coverimg: coverImage.url
+            }
+        },
+        { new: true }
+    ).select("-password")
+
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                { user },
+                "cover image updated"
+            )
+        )
+});
 
 export {
     registerUser,
@@ -376,5 +412,6 @@ export {
     changeCurrentPassword,
     getCurrentUser,
     updateUserTextDetails,
-    uddateUserAvatar
+    uddateUserAvatar,
+    updateUserCoverImg
 }
