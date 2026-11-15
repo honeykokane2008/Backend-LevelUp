@@ -1,3 +1,4 @@
+import express from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import {
@@ -12,6 +13,8 @@ import {
     updateUserCoverImg
 } from "../controllers/users.controller.js";
 
+
+const router = express.Router();
 
 router.route("/register").post(
     upload.fields([
