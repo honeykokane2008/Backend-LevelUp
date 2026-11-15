@@ -27,10 +27,18 @@ const userSchema = new Schema(
         },
         avatar: {
             type: String, //third party url for photo/avatar
+
             required: true,
         },
+        avatarPublicID: {
+            type: String,
+            required: true
+        },
         coverimg: {
-            type: String, //third party url for photo/avatar
+            type: String //third party url for photo/avatar
+        },
+        coverimgPublicID: {
+            type: String
         },
         watchHistory: [
             {

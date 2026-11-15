@@ -7,7 +7,7 @@ body:
     - type: file
       key: coverimg
       src:
-        - /C:/Users/user/Desktop/test4.avif
+        - /C:/Users/user/Desktop/test3.avif
       description: ""
       disabled: false
 order: 9000

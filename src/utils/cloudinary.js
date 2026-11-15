@@ -21,16 +21,35 @@ const uploadOnCloudinary = async (localFilePath) => {
             resource_type: 'auto'
         })
 
-        console.log(`response is clear in uploadOnCloudinary`)
+        // console.log(`response is clear in uploadOnCloudinary`)
 
         console.log(`file is uploded on url :`, response.url);
         fs.unlinkSync(localFilePath); // delete temp file after success
-        return response;
 
+        return response;
+        
     } catch (error) {
         if (fs.existsSync(localFilePath)) fs.unlinkSync(localFilePath); // delete temp file after failure
-        throw new  ApiError(400, error || "some problem in uploadOnCloudinary");
+        throw new ApiError(400, error || "some problem in uploadOnCloudinary");
     }
 };
 
-export { uploadOnCloudinary };
+const deleteFromCloudinary = async (publicID) => {
+    try {
+        if (!publicID) {
+            throw new ApiError(404, "public ID not found")
+        }
+        console.log(`publicID got`);
+
+        const response = await cloudinary.uploader.destroy(publicID)
+
+        console.log(`file deleted `, publicID)
+    } catch (error) {
+        throw new ApiError(400, error || "some problem in deleteFromCloudinary")
+    }
+}
+
+export { 
+    uploadOnCloudinary,
+    deleteFromCloudinary
+ };
