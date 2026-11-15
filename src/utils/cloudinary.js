@@ -39,7 +39,7 @@ const deleteFromCloudinary = async (publicID) => {
         if (!publicID) {
             throw new ApiError(404, "public ID not found")
         }
-        console.log(`publicID got`);
+        // console.log(`publicID got`);
 
         const response = await cloudinary.uploader.destroy(publicID)
 

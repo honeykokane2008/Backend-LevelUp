@@ -1,4 +1,3 @@
-import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import {
@@ -13,19 +12,6 @@ import {
     updateUserCoverImg
 } from "../controllers/users.controller.js";
 
-
-import express from "express";
-
-
-
-const router = Router();
-
-
-const app = express();
-app.use((req, res, next) => {
-    console.log("HIT:", req.method, req.originalUrl)
-    next()
-})
 
 router.route("/register").post(
     upload.fields([
