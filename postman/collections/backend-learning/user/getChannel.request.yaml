@@ -1,0 +1,7 @@
+$kind: http-request
+description: ""
+url: "{{server}}//c/:username"
+method: GET
+pathVariables:
+  username: ""
+order: 10000

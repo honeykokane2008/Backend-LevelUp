@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{server}}/user/getWatchHistory"
+method: GET
+order: 11000

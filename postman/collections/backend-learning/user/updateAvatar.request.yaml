@@ -1,6 +1,6 @@
 $kind: http-request
 url: "{{server}}/user/updateAvatar"
-method: POST
+method: PATCH
 body:
   type: formdata
   content:

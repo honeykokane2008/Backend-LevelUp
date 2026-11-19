@@ -9,8 +9,10 @@ import {
     changeCurrentPassword,
     getCurrentUser,
     updateUserTextDetails,
-    uddateUserAvatar,
-    updateUserCoverImg
+    updateUserAvatar,
+    updateUserCoverImg,
+    getUserChannelProfile,
+    getWatchHistory
 } from "../controllers/users.controller.js";
 
 
@@ -34,21 +36,25 @@ router.route("/refreshToken").post(refreshAccessToken);
 
 router.route("/changePass").post(verifyJWT, changeCurrentPassword);
 
-router.route("/changeDetails").post(verifyJWT, updateUserTextDetails);
+router.route("/changeDetails").patch(verifyJWT, updateUserTextDetails);
 
 router.route("/getCurrentUser").get(verifyJWT, getCurrentUser);
 
-router.route("/updateAvatar").post(
+router.route("/updateAvatar").patch(
     verifyJWT,
     upload.single("avatar"),
-    uddateUserAvatar
+    updateUserAvatar
 );
 
-router.route("/updateCoverImg").post(
+router.route("/updateCoverImg").patch(
     verifyJWT,
     upload.single("coverimg"),
     updateUserCoverImg
 );
+
+router.route("/c/:username").get(verifyJWT, getUserChannelProfile);
+
+router.route("/getWatchHistory").get(verifyJWT, getWatchHistory);
 
 
 
