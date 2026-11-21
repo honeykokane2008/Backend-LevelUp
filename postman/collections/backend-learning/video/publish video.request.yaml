@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{server}}/video/publishVideo"
+method: POST
+body:
+  type: formdata
+  content: []
+order: 1000

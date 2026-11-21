@@ -108,7 +108,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 });
 
-
 const loginUser = asyncHandler(async (req, res) => {
     //     take data
     //     check data
@@ -281,7 +280,6 @@ const getCurrentUser = asyncHandler(async (req, res) => {
         )
 });
 
-
 const updateUserTextDetails = asyncHandler(async (req, res) => {
     const { updatedFullName, updatedEmail } = req.body;
 
@@ -331,7 +329,6 @@ const updateUserTextDetails = asyncHandler(async (req, res) => {
         )
 
 });
-
 
 const updateUserAvatar = asyncHandler(async (req, res) => {
     const avatarLocalPath = req.file?.path
@@ -390,7 +387,6 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
             )
         )
 });
-
 
 const updateUserCoverImg = asyncHandler(async (req, res) => {
     const coverImageLocalPath = req.file?.path
@@ -452,7 +448,6 @@ const updateUserCoverImg = asyncHandler(async (req, res) => {
         )
 });
 
-
 const getUserChannelProfile = asyncHandler(async (req, res) => {
     const { username } = req.params
 
@@ -509,7 +504,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
         }
     ])
 
-    if (!channel?.aplength) {
+    if (!channel?.length) {
         throw new ApiError(400, "channel not found");
     }
 
