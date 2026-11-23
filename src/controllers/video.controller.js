@@ -7,6 +7,7 @@ import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 
 const publishVideo = asyncHandler(async (req, res) => {
+
     // user will be loged in
     // user will click on upload video
     // new page will open
@@ -20,13 +21,15 @@ const publishVideo = asyncHandler(async (req, res) => {
     // check data is uploaded to db
     // return response
 
-
-
     const { description, title } = req.body;
+
+    const owner = await User.findById(req.user?._id).select("-password -refreshToken");
 
     if ([title, description].some((field) => !field || field.trim() === "")) {
         throw new ApiError(400, "title is required")
     }
+
+    
 
     const videoLocalPath = req.files?.video[0]?.path;
     const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
@@ -43,7 +46,7 @@ const publishVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "video or thumbnail not uploaded");
     }
 
-    const owner = await User.findById(req.user?._id).select("-password -refreshToken");
+
 
     const publishedVideo = await Video.create({
         videoFile: video.url,
