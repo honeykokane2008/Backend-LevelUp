@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { User } from "../models/user.models.js";
 import { Video } from "../models/video.models.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -29,8 +30,6 @@ const publishVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "title is required")
     }
 
-
-
     const videoLocalPath = req.files?.video[0]?.path;
     const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
 
@@ -45,8 +44,6 @@ const publishVideo = asyncHandler(async (req, res) => {
     if (!video || !thumbnail) {
         throw new ApiError(400, "video or thumbnail not uploaded");
     }
-
-
 
     const publishedVideo = await Video.create({
         videoFile: video.url,
@@ -75,6 +72,10 @@ const getAllVideo = asyncHandler(async (req, res) => {
 
     const ownerId = req.user?._id;
 
+    if (!ownerId) {
+        throw new ApiError(400, "owner id not found");
+    }
+
     const allVideos = await Video.aggregate([
         {
             $match: {
@@ -93,6 +94,10 @@ const getAllVideo = asyncHandler(async (req, res) => {
         }
     ])
 
+    if (allVideos.length === 0) {
+        throw new ApiError(400, "all videos not found")
+    }
+
     return res
         .status(200)
         .json(
@@ -105,10 +110,48 @@ const getAllVideo = asyncHandler(async (req, res) => {
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
+    const { videoId } = req.params;
 
-})
+    if (!videoId) {
+        throw new ApiError(400, "video id not found")
+    }
+
+    const video = await Video.aggregate([
+        {
+            $match: {
+                _id: new mongoose.Types.ObjectId(videoId)
+            }
+        }, {
+            $project: {
+                videoFile: 1,
+                thumbnail: 1,
+                owner: 1,
+                title: 1,
+                description: 1,
+                duration: 1,
+                views: 1,
+                isPublished: 1
+            }
+        }
+    ])
+
+    if (video.length === 0) {
+        throw new ApiError(400, "video not fetched")
+    }
+
+    return res
+    .status(200)
+    .json(
+        new ApiResponse(
+            200,
+            video,
+            "video is fetched"
+        )
+    )
+});
 
 export {
     publishVideo,
-    getAllVideo
+    getAllVideo,
+    getVideoById
 }
