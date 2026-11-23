@@ -29,7 +29,7 @@ const publishVideo = asyncHandler(async (req, res) => {
         throw new ApiError(400, "title is required")
     }
 
-    
+
 
     const videoLocalPath = req.files?.video[0]?.path;
     const thumbnailLocalPath = req.files?.thumbnail[0]?.path;
@@ -71,6 +71,44 @@ const publishVideo = asyncHandler(async (req, res) => {
 
 });
 
+const getAllVideo = asyncHandler(async (req, res) => {
+
+    const ownerId = req.user?._id;
+
+    const allVideos = await Video.aggregate([
+        {
+            $match: {
+                owner: ownerId
+            }
+        }, {
+            $project: {
+                thumbnail: 1,
+                owner: 1,
+                title: 1,
+                description: 1,
+                duration: 1,
+                views: 1,
+                isPublished: 1
+            }
+        }
+    ])
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                allVideos,
+                "video is send"
+            )
+        )
+});
+
+const getVideoById = asyncHandler(async (req, res) => {
+
+})
+
 export {
-    publishVideo
+    publishVideo,
+    getAllVideo
 }

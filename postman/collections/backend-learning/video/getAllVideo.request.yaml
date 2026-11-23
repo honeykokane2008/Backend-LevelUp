@@ -1,0 +1,4 @@
+$kind: http-request
+url: "{{server}}/video/getAllVideo"
+method: GET
+order: 2000

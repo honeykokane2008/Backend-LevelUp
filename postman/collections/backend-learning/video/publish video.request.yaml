@@ -3,5 +3,27 @@ url: "{{server}}/video/publishVideo"
 method: POST
 body:
   type: formdata
-  content: []
+  content:
+    - type: text
+      key: title
+      value: honey-test-video-1
+      description: ""
+      disabled: false
+    - type: text
+      key: description
+      value: this is blaaa blaaa blaaa
+      description: ""
+      disabled: false
+    - type: file
+      key: video
+      src:
+        - /C:/Users/user/Desktop/test files/file_example_MP4_640_3MG.mp4
+      description: ""
+      disabled: false
+    - type: file
+      key: thumbnail
+      src:
+        - /C:/Users/user/Desktop/test files/test1.jpg
+      description: ""
+      disabled: false
 order: 1000
