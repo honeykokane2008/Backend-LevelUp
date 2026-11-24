@@ -38,7 +38,6 @@ const videoSchema = new Schema(
             default: true,
         }
 
-
     },
     {
         timestamps: true

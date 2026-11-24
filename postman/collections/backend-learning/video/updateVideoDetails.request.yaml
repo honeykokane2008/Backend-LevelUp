@@ -1,0 +1,7 @@
+$kind: http-request
+url: "{{server}}/video/updateVideoDetails"
+method: PATCH
+body:
+  type: json
+  content: ""
+order: 4000

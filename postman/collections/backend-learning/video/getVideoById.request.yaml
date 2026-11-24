@@ -2,7 +2,8 @@ $kind: http-request
 url: "{{server}}/video/c/:videoId"
 method: GET
 pathVariables:
-  - key: videoId
-    value: 6b044c02b079957b9b89c302
-    description: ""
+  videoId: 6b044c02b079957b9b89c302
+body:
+  type: json
+  content: ""
 order: 3000

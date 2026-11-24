@@ -110,48 +110,100 @@ const getAllVideo = asyncHandler(async (req, res) => {
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
-    const { videoId } = req.params;
+    const videoId = req.video?._id;
 
     if (!videoId) {
         throw new ApiError(400, "video id not found")
     }
 
-    const video = await Video.aggregate([
-        {
-            $match: {
-                _id: new mongoose.Types.ObjectId(videoId)
-            }
-        }, {
-            $project: {
-                videoFile: 1,
-                thumbnail: 1,
-                owner: 1,
-                title: 1,
-                description: 1,
-                duration: 1,
-                views: 1,
-                isPublished: 1
-            }
-        }
-    ])
+    const video = await Video.findById(videoId).select(
+        "videoFile thumbnail owner title description duration views isPublished"
+    );
 
-    if (video.length === 0) {
+    if (!video) {
         throw new ApiError(400, "video not fetched")
     }
 
     return res
-    .status(200)
-    .json(
-        new ApiResponse(
-            200,
-            video,
-            "video is fetched"
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                video,
+                "video is fetched"
+            )
         )
-    )
+});
+
+const updateVideoDetails = asyncHandler(async (req, res) => {
+
+    const { updatedTitle, updatedDescription } = req.body;
+
+    if (!updatedTitle && !updatedDescription) {
+        throw new ApiError(400, "give updated title or updated description")
+    }
+
+    let video;
+
+    if (updatedDescription) {
+        video = await Video.findByIdAndUpdate(
+            req.video?._id,
+            {
+                $set: {
+                    description: updatedDescription
+                }
+            },
+            { new: true }
+        ).select(
+            "-duration -views -videoFile"
+        )
+
+        if (!video) {
+            throw new ApiError(400, "description update got error")
+        }
+    }
+
+    if (updatedTitle) {
+        video = await Video.findByIdAndUpdate(
+            req.video?._id,
+            {
+                $set: {
+                    title: updatedTitle
+                }
+            },
+            { new: true }
+        ).select(
+            "-duration -views -videoFile"
+        )
+
+        if (!video) {
+            throw new ApiError(400, "title update got error")
+        }
+    }
+
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                video,
+                "details updated"
+            )
+        )
+});
+
+const deleteVideo = asyncHandler(async (req, res) => {
+
+});
+
+const togglePublishStatus = asyncHandler(async (req, res) => {
+
 });
 
 export {
     publishVideo,
     getAllVideo,
-    getVideoById
+    getVideoById,
+    updateVideoDetails
 }
