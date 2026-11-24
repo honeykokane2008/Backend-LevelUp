@@ -3,10 +3,13 @@ import { upload } from "../middleware/multer.middleware.js";
 import { verifyJWT } from "../middleware/auth.middleware.js";
 import { loadVideo } from "../middleware/video.middleware.js";
 import {
-    getAllVideo,
-    updateVideoDetails,
     publishVideo,
-    getVideoById
+    getAllVideo,
+    getVideoById,
+    updateVideoDetails,
+    deleteVideo,
+    togglePublishStatus,
+    updatedThumbnail
 } from "../controllers/video.controller.js";
 
 const router = express.Router();
@@ -35,6 +38,12 @@ router.route("/c/:videoId/updateVideoDetails").patch(
     verifyJWT,
     loadVideo,
     updateVideoDetails
+)
+
+router.route("/c/:videoId/deleteVideo").get(
+    verifyJWT,
+    loadVideo,
+    deleteVideo
 )
 
 

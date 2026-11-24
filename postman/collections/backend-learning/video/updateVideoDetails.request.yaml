@@ -1,7 +1,17 @@
 $kind: http-request
-url: "{{server}}/video/updateVideoDetails"
+url: "{{server}}/video/c/:videoId/updateVideoDetails"
 method: PATCH
+pathVariables:
+  - key: videoId
+    value: 6b044c02b079957b9b89c302
+    description: ""
 body:
   type: json
-  content: ""
+  content: "{\r
+
+    \    \"updatedDescription\":\"this is test description 1\"\r
+
+    \r
+
+    }"
 order: 4000

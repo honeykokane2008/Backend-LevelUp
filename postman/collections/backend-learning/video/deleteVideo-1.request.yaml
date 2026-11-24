@@ -1,0 +1,9 @@
+$kind: http-request
+name: deleteVideo
+url: "{{server}}/video/c/:videoId/deleteVideo"
+method: GET
+pathVariables:
+  - key: videoId
+    value: 6b05354fb1309a9972758324
+    description: ""
+order: 5000

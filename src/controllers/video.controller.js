@@ -195,9 +195,28 @@ const updateVideoDetails = asyncHandler(async (req, res) => {
 
 const deleteVideo = asyncHandler(async (req, res) => {
 
+    const deletedVideo = await Video.findByIdAndDelete(req.video?._id);
+
+    if (!deleteVideo) {
+        throw new ApiError(400, "video not deleted")
+    }
+
+    return res
+        .status(200)
+        .json(
+            new ApiResponse(
+                200,
+                {deleteVideo},
+                "video deleted"
+            )
+        )
 });
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
+
+});
+
+const updatedThumbnail = asyncHandler(async (req, res) => {
 
 });
 
@@ -205,5 +224,8 @@ export {
     publishVideo,
     getAllVideo,
     getVideoById,
-    updateVideoDetails
+    updateVideoDetails,
+    deleteVideo,
+    togglePublishStatus,
+    updatedThumbnail
 }
